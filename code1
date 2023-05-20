@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    #fileInput {
+      margin: 20px 0;
+    }
+  </style>
+  <script>
+    function convertFile() {
+      var fileInput = document.getElementById('fileInput');
+      var file = fileInput.files[0];
+      var outputContainer = document.getElementById('output');
+      
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var content = e.target.result;
+          var extension = file.name.split('.').pop();
+          var convertedContent = '';
+          
+          if (extension === 'docx' || extension === 'pdf') {
+            // Convert the file content based on the variations
+            // You'll need to use appropriate libraries or techniques here
+            // to parse and modify the content based on the specified rules
+            convertedContent = convertToReadableVersion(content);
+          } else {
+            outputContainer.innerHTML = 'Unsupported file format.';
+          }
+          
+          // Display the converted content
+          if (convertedContent) {
+            outputContainer.innerHTML = convertedContent;
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        outputContainer.innerHTML = 'No file selected.';
+      }
+    }
+    
+    function convertToReadableVersion(content) {
+      // Apply the variations to the content and return the modified version
+      
+      // Example implementation: Applying variations using regular expressions
+      content = content.replace(/\b(\w{1,3})\b/g, '<b>$1</b>');
+      content = content.replace(/\b(\w{4,5})\b/g, '<b>$1</b>');
+      content = content.replace(/\b(\w{6,})\b/g, '<b>$1</b>');
+      
+      // Increase font size by two points
+      content = content.replace(/font-size:(\d+)px;/g, function(match, size) {
+        var newSize = parseInt(size) + 2;
+        return 'font-size:' + newSize + 'px;';
+      });
+      
+      // Replace font-family with the most readable font
+      
+      // Example: replace Arial with Verdana
+      content = content.replace(/font-family: Arial, sans-serif;/g, 'font-family: Verdana, sans-serif;');
+      
+      return content;
+    }
+  </script>
+</head>
+<body>
+  <h1>File Converter</h1>
+  
+  <input type="file" id="fileInput">
+  <button onclick="convertFile()">Convert</button>
+  
+  <div id="output"></div>
+</body>
+</html>
